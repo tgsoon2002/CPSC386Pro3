@@ -29,6 +29,10 @@ textColor = (255, 0, 0)
 endGame = False
 change = True
 
+moveVelocity = 4
+
+listCollider = []
+
 Mouse = [(0, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # up,down,left,right,space
 Key = [0, 0, 0, 0, 0]
@@ -51,6 +55,15 @@ def QuitGame():
     gameExit = True
 
 
+def AddObject():
+    Info1 = COMP.GameObject()
+    Info1.transform = COMP.Transform()
+    Info1.transform.location = [0, 500]
+    Info1.listComp.append(DS.DrawComponent([0, (textColor, [5000, 120])]))
+    Info1.listComp.append(CS.ColliderComponent((0, [0, 0, 5000, 120])))
+    SetSce.listObject.append(Info1)
+
+
 # set transform
 tran = COMP.Transform()
 tran.location = [75, 10]
@@ -59,48 +72,57 @@ tran.location = [75, 10]
 # Type : 1 -> info (color,radius)
 dInfo = DS.DrawComponent([0, (darkGreen, [50, 20])])
 # add Physics info (1, weight,velocity,drag)
-pInfo = PS.PhysicsComponent([1, [0, 0], 0.1])
+pInfo = PS.PhysicsComponent([1, [0, 0], 0.1], "platform")
 # add collider info (2,(type,Info))
 # 0 : rect [offsetx,offsety,width,length],
 # 1 : circle [offsetx, offsety,radius]
 cInfo = CS.ColliderComponent((0, [0, 0, 5, 5]))
-
 Info = COMP.GameObject()
 Info.transform = tran
 Info.listComp.append(dInfo)
 Info.listComp.append(pInfo)
 Info.listComp.append(cInfo)
 SetSce.listObject.append(Info)
+listCollider.append(Info.GetComponent("ColliderComponent"))
 
-
-tran1 = COMP.Transform()
-tran1.location = [275, 10]
-dInfo1 = DS.DrawComponent([1, (darkGreen, 25)])
-pInfo1 = PS.PhysicsComponent([0, [0, 0], 0.1])
-
-
+# create a circle object
 Info1 = COMP.GameObject()
-Info1.transform = tran1
-Info1.listComp.append(dInfo1)
-Info1.listComp.append(pInfo1)
-
+Info1.transform = COMP.Transform()
+Info1.transform.location = [75, 110]
+Info1.listComp.append(DS.DrawComponent([1, (darkGreen, 25)]))
+# Info1.listComp.append(PS.PhysicsComponent([0, [0, 0], 0.1], "player"))
 SetSce.listObject.append(Info1)
 
+AddObject()
 
-playerChar = SetSce.listObject[1]
+playerChar = SetSce.listObject[0]
 playerPhys = playerChar.GetComponent("PhysicsComponent")
-
-
-# Call to draw object in screen.
-# Info [0] : int , Type of object ( rect, circle, )
-# Info [1] : transform
+playerColl = playerChar.GetComponent("ColliderComponent")
 
 
 def UpdateRender():
     DS.surf.fill((255, 255, 255))
     for x in SetSce.listObject:
         for comps in x.listComp:
-            comps.Active(x.transform)
+            if comps.name == "DrawComponent":
+                comps.Active(x.transform)
+
+
+def ApplyPhysics():
+    for x in SetSce.listObject:
+        for comps in x.listComp:
+            if comps.name == "PhysicsComponent":
+                comps.ApplyGravity()
+    # for x in SetSce.listObject:
+    #     if x != playerChar:
+    #         for comps in x.listComp:
+    #             if comps.name == "ColliderComponent":
+    #                 comps.CheckCollider(
+    #                     x.transform, playerColl, playerChar.transform)
+    for x in SetSce.listObject:
+        for comps in x.listComp:
+            if comps.name == "PhysicsComponent":
+                comps.ApplyVelocity(x.transform)
 
 
 #---------------- Setup value ------------------------
@@ -120,13 +142,13 @@ while not gameExit:
             Mouse[0] = (event.pos[0], event.pos[1])
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
-                Key[0] = 1
+                Key[0] += 1
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
-                Key[1] = 1
+                Key[1] += 1
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
-                Key[2] = 1
+                Key[2] += 1
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
-                Key[3] = 1
+                Key[3] += 1
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
                 Key[0] = 0
@@ -138,21 +160,23 @@ while not gameExit:
                 Key[3] = 0
     # ===================== Logic =====================
     # (1, [0, [0, 0], 0.1])
-    print(SetSce.listObject[0].listComp)
-    if(Key[2] == 1):
-        playerPhys.SetVelocity(playerChar.transform,
-                               [-1, playerPhys.Info[1][1]])
-    elif(Key[3] == 1):
+    # print(SetSce.listObject[0].listComp)
+    if(Key[0] == 1):
+        print(playerPhys.Info[1])
         playerPhys.SetVelocity(playerChar.transform, [
-                               1, playerPhys.Info[1][1]])
-    elif(Key[0] == 1):
-        playerPhys.SetVelocity(playerChar.transform, [
-                               playerPhys.Info[1][0], -1])
+                               playerPhys.Info[1][0], -moveVelocity])
     elif(Key[1] == 1):
         playerPhys.SetVelocity(playerChar.transform, [
-            playerPhys.Info[1][0], 1])
-    else:
-        playerPhys.SetVelocity(playerChar.transform, [0, 0])
+            playerPhys.Info[1][0], moveVelocity])
+    elif(Key[2] == 1):
+        playerPhys.SetVelocity(playerChar.transform,
+                               [-moveVelocity, playerPhys.Info[1][1]])
+    elif(Key[3] == 1):
+        playerPhys.SetVelocity(playerChar.transform, [
+                               moveVelocity, playerPhys.Info[1][1]])
+
+    # else:
+    #     playerPhys.SetVelocity(playerChar.transform, [0, 0])
 
     #---- check if mouse is pressed on an interactable oject -----
     # if Mouse[1] == 1:
@@ -163,8 +187,10 @@ while not gameExit:
     if Mouse[3] == 1:
         print(Mouse[0])
     # ===================== Apply physics =====================
-
+    # SetSce
+    ApplyPhysics()
     # ===================== Update and draw =====================
+
     if(change):
         UpdateRender()
     #-----------game end---------------

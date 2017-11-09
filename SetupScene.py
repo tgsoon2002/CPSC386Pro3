@@ -1,3 +1,4 @@
+import Components
 name = "scene"
 listObject = []
 

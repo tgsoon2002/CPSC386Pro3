@@ -6,21 +6,40 @@ import Components as comp
 class PhysicsComponent (comp.BaseComponent):
     type = 1
     Info = []
+    layer = ""
+    falling = True
 
-    def __init__(self, Info):
+    def __init__(self, Info, layer):
         self.Info = Info
         self.name = "PhysicsComponent"
 
     def SetVelocity(self, trans, Info):
-        trans.location[0] += Info[0]
-        trans.location[1] += Info[1]
+        self.Info[1] = Info
+        print(self.Info[1])
+
+    def ApplyGravity(self):
+        if self.falling == True or self.Info[1][1] < 0:
+            vel = self.Info[1]
+            # # apply physics
+            vel[1] += self.Info[0] * 0.1
+            # # update velocity
+            self.Info[1] = vel
+
+    def ApplyVelocity(self, trans):
+        print(self.Info[1])
+        trans.location[0] += self.Info[1][0]
+        if trans.location[1] < 480.0 and self.Info[1][1] > 0:
+            self.falling = True
+            trans.location[1] += self.Info[1][1]
+        elif self.Info[1][1] < 0:
+            print("Jump")
+            trans.location[1] += self.Info[1][1]
+        else:
+            print("not falling")
+            self.falling = False
 
     def Active(self, trans):
-        vel = self.Info[1]
-        # # apply physics
-        vel[1] += self.Info[0] * 0.1
-        # # update velocity
-        self.Info[1] = vel
-        # # apply gravity
-        trans.location[0] += vel[0]
-        trans.location[1] += vel[1]
+        self.ApplyGravity()
+        # print(trans.location[0])
+        # if(trans.location[0] < 500):
+        # self.ApplyVelocity(trans)
