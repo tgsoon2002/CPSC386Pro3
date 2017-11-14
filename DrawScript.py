@@ -17,6 +17,10 @@ def setupSurface(x, y):
 # Info : [color,[width, length]]
 
 
+def DrawTexture(tran, info):
+        surf.blit(info[0], tran.location)
+
+
 def DrawRectangle(tran, Info):
     """ Draw Rectangle:
         tran : transform of object
@@ -40,7 +44,8 @@ def DrawCircle(tran, Info):
 
 # map the inputs to the function blocks
 options = {0: DrawRectangle,
-           1: DrawCircle
+           1: DrawCircle,
+           2: DrawTexture
            }
 
 # Call to draw object in screen.

@@ -25,6 +25,7 @@ brightGreen = (0, 255, 0)
 boardColor = (244, 66, 95)
 lightGreen = (107, 244, 65)
 textColor = (255, 0, 0)
+image = pygame.image.load("cavemanSprite.jpg").convert()
 
 endGame = False
 change = True
@@ -70,7 +71,7 @@ tran.location = [75, 10]
 # setdraw info (0,[type,info])
 # Type : 0 -> info (color,[width, leng])
 # Type : 1 -> info (color,radius)
-dInfo = DS.DrawComponent([0, (darkGreen, [50, 20])])
+dInfo = DS.DrawComponent([2, (image, [20, 20])])
 # add Physics info (1, weight,velocity,drag)
 pInfo = PS.PhysicsComponent([1, [0, 0], 0.1], "platform")
 # add collider info (2,(type,Info))
@@ -86,12 +87,12 @@ SetSce.listObject.append(Info)
 listCollider.append(Info.GetComponent("ColliderComponent"))
 
 # create a circle object
-Info1 = COMP.GameObject()
-Info1.transform = COMP.Transform()
-Info1.transform.location = [75, 110]
-Info1.listComp.append(DS.DrawComponent([1, (darkGreen, 25)]))
+#Info1 = COMP.GameObject()
+#Info1.transform = COMP.Transform()
+#Info1.transform.location = [75, 110]
+#Info1.listComp.append(DS.DrawComponent([1, (darkGreen, 25)]))
 # Info1.listComp.append(PS.PhysicsComponent([0, [0, 0], 0.1], "player"))
-SetSce.listObject.append(Info1)
+#SetSce.listObject.append(Info1)
 
 AddObject()
 
