@@ -25,6 +25,7 @@ boardColor = (244, 66, 95)
 lightGreen = (107, 244, 65)
 textColor = (255, 0, 0)
 image = pygame.image.load("cavemanSprite.jpg").convert()
+alien = pygame.image.load("alien.gif")
 
 endGame = False
 change = True
@@ -54,11 +55,11 @@ def AddObject():
 
 # set transform
 tran = COMP.Transform()
-tran.location = [75, 10]
+tran.location = [0, 400]
 # setdraw info (0,[type,info])
 # Type : 0 -> info (color,[width, leng])
 # Type : 1 -> info (color,radius)
-dInfo = DS.DrawComponent([2, (image, [20, 20])])
+dInfo = DS.DrawComponent([2, (image, [10, 10])])
 # add Physics info (1, [weight,velocity,drag],layer)
 pInfo = PS.PhysicsComponent([1, [0, 0], [0, 0], 0.01], "platform")
 # add collider info (2,(type,Info))
@@ -74,12 +75,12 @@ SetSce.listObject.append(Info)
 listCollider.append(Info.GetComponent("ColliderComponent"))
 
 # create a circle object
-# Info1 = COMP.GameObject()
-# Info1.transform = COMP.Transform()
-# Info1.transform.location = [75, 110]
-# Info1.listComp.append(DS.DrawComponent([1, (darkGreen, 25)]))
-# Info1.listComp.append(PS.PhysicsComponent([0, [0, 0], 0.1], "player"))
-# SetSce.listObject.append(Info1)
+Info1 = COMP.GameObject()
+Info1.transform = COMP.Transform()
+Info1.transform.location = [650, 380]
+#Info1.listComp.append(PS.PhysicsComponent([0, [0, 0], 0.1], "player"))
+Info1.listComp.append(DS.DrawComponent([2, (alien, 25)]))
+SetSce.listObject.append(Info1)
 
 AddObject()
 
@@ -166,6 +167,7 @@ while not gameExit:
         playerPhys.SetVelocity(playerChar.transform, [
             0,  playerPhys.Info[1][1]])
 
+    Info1.transform.location[0] = Info1.transform.location[0] - 2
     #---- check if mouse is pressed on an interactable oject -----
     # if Mouse[1] == 1:
     # for index, x in enumerate(SetSce.listObject):
