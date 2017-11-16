@@ -1,3 +1,6 @@
+import pygame
+
+
 class Vec2D:
     x = 0
     y = 0
@@ -17,11 +20,17 @@ class BaseComponent:
     name = "baseComponent"
 
 
-class GameObject:
+class GameObject(pygame.sprite.Sprite):
     transform = Transform
     listComp = []
+    objectName = ""
 
-    def __init__(self):
+    def __init__(self, color, width, height):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.Surface([width, height])
+        self.image.fill([0, 0, 0])
+        self.rect = self.image.get_rect()
         self.transform = Transform()
         self.listComp = []
 
@@ -33,3 +42,8 @@ class GameObject:
     def UpdateComponent(self):
         for comp in self.listComp:
             print(comp)
+
+    def setPosition(self, x, y):
+        self.transform.location = [x, y]
+        self.rect.x = x
+        self.rect.y = y

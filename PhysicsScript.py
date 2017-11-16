@@ -34,7 +34,7 @@ class PhysicsComponent (comp.BaseComponent):
     def ApplyVelocity(self, trans):
         # print(self.Info[2])
         trans.location[0] += self.Info[1][0]
-        if trans.location[1] < 500.0 and self.Info[1][1] > 0:
+        if trans.location[1] < 410.0 and self.Info[1][1] > 0:
             self.falling = True
             trans.location[1] += self.Info[1][1]
         elif self.Info[1][1] < 0:

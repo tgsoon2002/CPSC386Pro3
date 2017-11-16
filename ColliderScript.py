@@ -3,9 +3,9 @@ import math
 
 
 class ColliderComponent(COMP.BaseComponent):
-    """# add collider info (2,(type,Info))
-    # 0 : rect [offsetx,offsety,width,length],
-    # 1 : circle [offsetx, offsety,radius]
+    """add collider info (2,(type,Info))
+     0 : rect [offsetx,offsety,width,length],
+     1 : circle [offsetx, offsety,radius]
     """
 
     Type = 1
@@ -17,7 +17,6 @@ class ColliderComponent(COMP.BaseComponent):
         self.name = "ColliderComponent"
 
     def CheckCollider(self, trans, otherColl, otherTrans):
-        # self.CompareCircleToCircle(trans, otherTrans, 3, 3)
         """ Check Collider return True/False
             It will check between Circle or Rect with orther Circle or Rect"""
         if(self.Type == 1):
@@ -66,8 +65,6 @@ class ColliderComponent(COMP.BaseComponent):
                 rTrans2.location[1] + rInfo2[1]]
         difx = math.fabs(pos1[0] - pos2[0])
         dify = math.fabs(pos1[1] - pos2[1])
-        print(pos1)
-        print(pos2)
         if pos1[0] < pos2[0]:
             if pos1[1] > pos2[1]:
                 if difx < rInfo1[2] and dify < rInfo1[3]:

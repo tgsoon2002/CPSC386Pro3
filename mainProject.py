@@ -25,13 +25,12 @@ brightGreen = (0, 255, 0)
 boardColor = (244, 66, 95)
 lightGreen = (107, 244, 65)
 textColor = (255, 0, 0)
-image = pygame.image.load("cavemanSprite.jpg").convert()
-alien = pygame.image.load("alien.gif")
+
 
 endGame = False
 change = True
 
-moveVelocity = 4
+moveVelocity = 6
 
 
 Mouse = [(0, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -44,70 +43,38 @@ def QuitGame():
     gameExit = True
 
 
-pygame.mouse.set_visible(False)
+# pygame.mouse.set_visible(False)
 SetSce.LoadLevel()
 
+playerChar = SetSce.playerObject
+playerPhys = SetSce.playerPhy
 
-# set transform
-tran = COMP.Transform()
-tran.location = [0, 400]
-# setdraw info (0,[type,info])
-# Type : 0 -> info (color,[width, leng])
-# Type : 1 -> info (color,radius)
-dInfo = DS.DrawComponent([2, (image, [10, 10])])
-# add Physics info (1, [weight,velocity,drag],layer)
-pInfo = PS.PhysicsComponent([1, [0, 0], [0, 0], 0.01], "platform")
-# add collider info (2,(type,Info))
-# 0 : rect [offsetx,offsety,width,length],
-# 1 : circle [offsetx, offsety,radius]
-cInfo = CS.ColliderComponent((0, [0, 0, 5, 5]))
-Info = COMP.GameObject()
-Info.transform = tran
-Info.listComp.append(dInfo)
-Info.listComp.append(pInfo)
-Info.listComp.append(cInfo)
-SetSce.listObject.append(Info)
-listCollider.append(Info.GetComponent("ColliderComponent"))
-
-# create a circle object
-Info1 = COMP.GameObject()
-Info1.transform = COMP.Transform()
-Info1.transform.location = [650, 380]
-#Info1.listComp.append(PS.PhysicsComponent([0, [0, 0], 0.1], "player"))
-Info1.listComp.append(DS.DrawComponent([2, (alien, 25)]))
-SetSce.listObject.append(Info1)
-
-AddObject()
-
-playerChar = SetSce.listObject[0]
-playerPhys = playerChar.GetComponent("PhysicsComponent")
-playerColl = playerChar.GetComponent("ColliderComponent")
+listOtherObject = SetSce.listEnemy
 
 
 def UpdateRender():
     DS.DrawBackground()
-    for x in SetSce.listObject:
+    for x in SetSce.listDraw:
         for comps in x.listComp:
             if comps.name == "DrawComponent":
                 comps.Active(x.transform)
 
 
 def ApplyPhysics():
-    for x in SetSce.listObject:
+    # check for collider
+    for x in SetSce.listEnemy:
+        # print(x.listComp)
         for comps in x.listComp:
-            if comps.name == "PhysicsComponent":
-                comps.ApplyGravity()
-    for x in SetSce.listObject:
-        if x != playerChar:
-            for comps in x.listComp:
-                if comps.name == "ColliderComponent":
-                    result = comps.CheckCollider(
-                        x.transform, playerColl, playerChar.transform)
-                    print(result)
-    for x in SetSce.listObject:
-        for comps in x.listComp:
-            if comps.name == "PhysicsComponent":
-                comps.ApplyVelocity(x.transform)
+            if comps.name == "ColliderComponent":
+                result = comps.CheckCollider(
+                    x.transform, playerChar.GetComponent("ColliderComponent"), playerChar.transform)
+                if result:
+                    SetSce.ResetLevel()
+                # print(result)
+    # update velocity base on force
+    playerPhys.ApplyGravity()
+    # apply velocity to transform.
+    playerPhys.ApplyVelocity(playerChar.transform)
 
 
 #---------------- Setup value ------------------------
@@ -158,21 +125,18 @@ while not gameExit:
         playerPhys.SetVelocity(playerChar.transform, [
             0,  playerPhys.Info[1][1]])
 
-    if(Info.transform.location[0] < Info1.transform.location[0]):
-        Info1.transform.location[0] = Info1.transform.location[0] - 2
-    else:
-        Info1.transform.location[0] = Info1.transform.location[0] + 2
-
     #---- check if mouse is pressed on an interactable oject -----
     # if Mouse[1] == 1:
     # for index, x in enumerate(SetSce.listObject):
     #     if x[1][0] < Mouse[0][0] < x[1][0] + x[2][0] and x[1][1] < Mouse[0][1] < x[1][1] + x[2][1]:
     #         x[5](x, index)
     #----- If right mouse click.
-    if Mouse[3] == 1:
-        print(Mouse[0])
-    # ===================== Apply physics =====================
-    # SetSce
+    # if Mouse[3] == 1:
+    #     print(Mouse[0])
+    for enemy in SetSce.listEnemy:
+        enemy.transform.location[0] -= 5
+        # ===================== Apply physics =====================
+        # SetSce
     ApplyPhysics()
     # ===================== Update and draw =====================
 
