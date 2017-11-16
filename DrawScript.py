@@ -3,22 +3,28 @@ import Components as COMP
 import SetupScene as SetSce
 screenSize_x = 800
 screenSize_y = 600
-surf = pygame.display.set_mode((screenSize_x, screenSize_y))
+screen = pygame.display.set_mode((screenSize_x, screenSize_y))
+
+bgImage = pygame.image.load("Snake_Cave_Background.jpg").convert()
 
 
 def setupSurface(x, y):
     screenSize_x = x
     screenSize_y = y
-    surf = pygame.display.set_mode((screenSize_x, screenSize_y))
+    screen = pygame.display.set_mode((screenSize_x, screenSize_y))
+
     # define the function blocks
 
+
+def DrawBackground():
+    screen.blit(bgImage, [0, 0])
 # Draw rectabngle,
 # tran : transform of object
 # Info : [color,[width, length]]
 
 
 def DrawTexture(tran, info):
-        surf.blit(info[0], tran.location)
+    screen.blit(info[0], tran.location)
 
 
 def DrawRectangle(tran, Info):
@@ -26,8 +32,8 @@ def DrawRectangle(tran, Info):
         tran : transform of object
         Info : [color,[width, length]]"""
 
-    pygame.draw.rect(surf, Info[0], [tran.location[0],
-                                     tran.location[1], Info[1][0], Info[1][1]])
+    pygame.draw.rect(screen, Info[0], [tran.location[0],
+                                       tran.location[1], Info[1][0], Info[1][1]])
 
 # Draw circle:
 # tran : transform of object
@@ -39,7 +45,7 @@ def DrawCircle(tran, Info):
         tran : transform of object
         Info : [color,radius]"""
     pygame.draw.circle(
-        surf, Info[0], [int(tran.location[0]), int(tran.location[1])], Info[1])
+        screen, Info[0], [int(tran.location[0]), int(tran.location[1])], Info[1])
 
 
 # map the inputs to the function blocks

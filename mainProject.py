@@ -10,6 +10,7 @@ init()
 
 clock = pygame.time.Clock()
 
+inputInfo = {'horizontal': 0, 'vertical': 0}
 
 #-----------screen setting---------------
 DS.setupSurface(800, 600)
@@ -32,7 +33,6 @@ change = True
 
 moveVelocity = 4
 
-listCollider = []
 
 Mouse = [(0, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # up,down,left,right,space
@@ -44,13 +44,8 @@ def QuitGame():
     gameExit = True
 
 
-def AddObject():
-    Info1 = COMP.GameObject()
-    Info1.transform = COMP.Transform()
-    Info1.transform.location = [0, 500]
-    Info1.listComp.append(DS.DrawComponent([0, (textColor, [5000, 120])]))
-    Info1.listComp.append(CS.ColliderComponent((0, [0, 0, 5000, 120])))
-    SetSce.listObject.append(Info1)
+pygame.mouse.set_visible(False)
+SetSce.LoadLevel()
 
 
 # set transform
@@ -90,7 +85,7 @@ playerColl = playerChar.GetComponent("ColliderComponent")
 
 
 def UpdateRender():
-    DS.surf.fill((255, 255, 255))
+    DS.DrawBackground()
     for x in SetSce.listObject:
         for comps in x.listComp:
             if comps.name == "DrawComponent":
@@ -102,12 +97,13 @@ def ApplyPhysics():
         for comps in x.listComp:
             if comps.name == "PhysicsComponent":
                 comps.ApplyGravity()
-    # for x in SetSce.listObject:
-    #     if x != playerChar:
-    #         for comps in x.listComp:
-    #             if comps.name == "ColliderComponent":
-    #                 comps.CheckCollider(
-    #                     x.transform, playerColl, playerChar.transform)
+    for x in SetSce.listObject:
+        if x != playerChar:
+            for comps in x.listComp:
+                if comps.name == "ColliderComponent":
+                    result = comps.CheckCollider(
+                        x.transform, playerColl, playerChar.transform)
+                    print(result)
     for x in SetSce.listObject:
         for comps in x.listComp:
             if comps.name == "PhysicsComponent":
@@ -132,8 +128,8 @@ while not gameExit:
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
                 Key[0] += 1
-                playerPhys.SetVelocity(playerChar.transform,
-                                       [playerPhys.Info[1][0], -moveVelocity])
+                playerPhys.Jump(playerChar.transform,
+                                [playerPhys.Info[1][0], -moveVelocity])
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
                 Key[1] += 1
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
@@ -152,12 +148,7 @@ while not gameExit:
     # ===================== Logic =====================
     # (1, [0, [0, 0], 0.1])
     # print(SetSce.listObject[0].listComp)
-    if(Key[0] == 1):
-        print(playerPhys.Info[1][0])
-
-    # elif(Key[1] == 1):
-    #     playerPhys.SetForce([0, moveVelocity])
-    elif(Key[2] == 1):
+    if(Key[2] == 1):
         playerPhys.SetVelocity(playerChar.transform,
                                [-moveVelocity, playerPhys.Info[1][1]])
     elif(Key[3] == 1):
