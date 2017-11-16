@@ -167,7 +167,11 @@ while not gameExit:
         playerPhys.SetVelocity(playerChar.transform, [
             0,  playerPhys.Info[1][1]])
 
-    Info1.transform.location[0] = Info1.transform.location[0] - 2
+    if(Info.transform.location[0] < Info1.transform.location[0]):
+        Info1.transform.location[0] = Info1.transform.location[0] - 2
+    else:
+        Info1.transform.location[0] = Info1.transform.location[0] + 2
+
     #---- check if mouse is pressed on an interactable oject -----
     # if Mouse[1] == 1:
     # for index, x in enumerate(SetSce.listObject):
