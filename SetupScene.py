@@ -3,7 +3,6 @@ import DrawScript as DS
 import PhysicsScript as PS
 import ColliderScript as CS
 import Components as COMP
-from spritesheet_functions import SpriteSheet
 name = "scene"
 listObject = []
 listPlatformCollider = pygame.sprite.Group()
@@ -27,7 +26,7 @@ playerPhy = ()
 def LoadLevel():
     # set transform
     AddPlayer()
-    # append(Info.GetComponent("ColliderComponent"))
+    # append(plObject.GetComponent("ColliderComponent"))
     AddObject()
 
 
@@ -36,19 +35,21 @@ def AddObject():
     global listPlatformCollider
     global listEnemy
     # add the ground
-    Info1 = COMP.GameObject(playerImage, 20, 20)
-    Info1.transform = COMP.Transform()
-    Info1.transform.location = [0, 500]
-
+    Info1 = COMP.GameObject()
+    Info1.SetSolid(RED,800,300)
+    Info1.rect.y = 500
     # Info1.listComp.append(DS.DrawComponent([0, (RED, [800, 120])]))
     Info1.listComp.append(CS.ColliderComponent((0, [0, 0, 500, 120])))
 
     # create a circle object
-    Info2 = COMP.GameObject(WHITE, 20, 20)
-    Info2.transform = COMP.Transform()
-    Info2.transform.location = [650, 380]
+    Info2 = COMP.GameObject()
+    
     # Info1.listComp.append(PS.PhysicsComponent([0, [0, 0], 0.1], "player"))
-    Info2.listComp.append(DS.DrawComponent([2, (alien, 25)]))
+    
+    Info2.SetSprite(alien)
+    Info2.objectName = "alien"
+    Info2.rect.x = 650
+    Info2.rect.y = 380
     Info2.listComp.append(CS.ColliderComponent((0, [0, 0, 20, 30])))
     listDraw.add(Info1)
     listDraw.add(Info2)
@@ -60,25 +61,29 @@ def AddPlayer():
     global playerPhy
     global playerObject
     global listObject
-    tran = COMP.Transform()
-    tran.location = [0, 300]
-    dInfo = DS.DrawComponent([2, (playerImage, [20, 20])])
     pInfo = PS.PhysicsComponent([1, [0, 0], [0, 0], 0.01], "platform")
     cInfo = CS.ColliderComponent((0, [0, 0, 10, 100]))
-    Info = COMP.GameObject(WHITE, 20, 20)
-    Info.transform = tran
-    Info.listComp.append(dInfo)
-    Info.listComp.append(pInfo)
-    Info.listComp.append(cInfo)
-    listObject.append(Info)
-    listDraw.add(Info)
-    playerObject = Info
+    plObject = COMP.PlayerObject()
+
+    plObject.SetSprite(playerImage)
+    plObject.rect.y = 380
+    # plObject.listComp.append(dInfo)
+    plObject.listComp.append(pInfo)
+    plObject.listComp.append(cInfo)
+    listObject.append(plObject)
+    listDraw.add(plObject)
+    playerObject = plObject
     playerPhy = pInfo
 
 
 def ResetLevel():
     global playerObject
     global listEnemy
-    playerObject.transform.location = [0, 400]
+    playerObject.rect.x = 0
+    playerObject.rect.y = 400
     for enemy in listEnemy:
-        enemy.transform.location = [650, 380]
+        enemy.rect.x = 650
+        
+
+def ReDraw():
+    listDraw.draw(DS.screen)

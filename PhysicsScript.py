@@ -13,6 +13,7 @@ class PhysicsComponent (comp.BaseComponent):
     justJump = False
 
     def __init__(self, Info, layer):
+        print (Info)
         self.Info = Info
         self.name = "PhysicsComponent"
 
@@ -21,9 +22,9 @@ class PhysicsComponent (comp.BaseComponent):
         self.Info[2][1] = force[1] * self.Info[0]
         # print(self.Info[2])
 
-    def SetVelocity(self, trans, Info):
+    def SetVelocity(self, Info):
         self.Info[1] = Info
-        # print(self.Info[1])
+       
 
     def ApplyGravity(self):
         self.Info[2][1] = self.Info[2][1] + (0.01 * self.Info[0])
@@ -31,20 +32,19 @@ class PhysicsComponent (comp.BaseComponent):
         self.Info[1][1] += self.Info[2][1]
         # print(self.Info[2])
 
-    def ApplyVelocity(self, trans):
-        # print(self.Info[2])
-        trans.location[0] += self.Info[1][0]
-        if trans.location[1] < 410.0 and self.Info[1][1] > 0:
+    def ApplyVelocity(self, rect):
+        rect.x += self.Info[1][0]
+        if rect.y < 410.0 and self.Info[1][1] > 0:
             self.falling = True
-            trans.location[1] += self.Info[1][1]
+            rect.y += self.Info[1][1]
         elif self.Info[1][1] < 0:
-            trans.location[1] += self.Info[1][1]
+            rect.y += self.Info[1][1]
         else:
             self.Info[2][1] = 0
             self.falling = False
             self.justJump = False
 
-    def Jump(self, trans, Info):
+    def Jump(self, Info):
         if self.justJump == False:
             self.Info[1] = Info
             self.justJump = True

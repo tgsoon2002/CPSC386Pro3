@@ -99,7 +99,7 @@ class Player(pygame.sprite.Sprite):
             frame = (pos // 30) % len(self.walking_frames_l)
             self.image = self.walking_frames_l[frame]
  
-        # See if we hit anything
+        # See if we hit anything horizontal
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
             # If we are moving right,
@@ -113,7 +113,7 @@ class Player(pygame.sprite.Sprite):
         # Move up/down
         self.rect.y += self.change_y
  
-        # Check and see if we hit anything
+        # Check and see if we hit anything vertical
         block_hit_list = pygame.sprite.spritecollide(self, self.level.platform_list, False)
         for block in block_hit_list:
  
