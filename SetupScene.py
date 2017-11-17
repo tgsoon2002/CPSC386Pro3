@@ -3,6 +3,7 @@ import DrawScript as DS
 import PhysicsScript as PS
 import ColliderScript as CS
 import Components as COMP
+from spritesheet_functions import SpriteSheet
 name = "scene"
 listObject = []
 listPlatformCollider = pygame.sprite.Group()
@@ -35,10 +36,11 @@ def AddObject():
     global listPlatformCollider
     global listEnemy
     # add the ground
-    Info1 = COMP.GameObject(RED, 20, 20)
+    Info1 = COMP.GameObject(playerImage, 20, 20)
     Info1.transform = COMP.Transform()
     Info1.transform.location = [0, 500]
-    Info1.listComp.append(DS.DrawComponent([0, (RED, [800, 120])]))
+
+    # Info1.listComp.append(DS.DrawComponent([0, (RED, [800, 120])]))
     Info1.listComp.append(CS.ColliderComponent((0, [0, 0, 500, 120])))
 
     # create a circle object

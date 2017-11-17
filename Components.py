@@ -34,6 +34,8 @@ class GameObject(pygame.sprite.Sprite):
         self.transform = Transform()
         self.listComp = []
 
+        
+
     def GetComponent(self, type):
         for comp in self.listComp:
             if(comp.name == type):
