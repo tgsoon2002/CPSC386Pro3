@@ -39,7 +39,7 @@ class GameObject(pygame.sprite.Sprite):
 
 class PlayerObject(GameObject):
     def __init__(self):
-        super().__init__()
+        super(PlayerObject, self).__init__()
     def CheckCollider ( self,enemyList):
         block_hit_list = pygame.sprite.spritecollide(self, enemyList, False)
         
