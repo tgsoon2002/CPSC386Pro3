@@ -5,6 +5,8 @@ import SetupScene as SetSce
 import DrawScript as DS
 import PhysicsScript as PS
 import Components as COMP
+import random
+from timeit import default_timer
 init()
 
 clock = pygame.time.Clock()
@@ -24,7 +26,6 @@ brightGreen = (0, 255, 0)
 boardColor = (244, 66, 95)
 lightGreen = (107, 244, 65)
 textColor = (255, 0, 0)
-
 
 endGame = False
 change = True
@@ -72,7 +73,7 @@ def ApplyPhysics():
 
 
 while not gameExit:
-    
+    rand = random.randrange(1,100)
     # ===================== Input =====================
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -120,6 +121,11 @@ while not gameExit:
     if(change):
         DS.DrawBackground()
         SetSce.ReDraw()
+
+
+    if(rand == 3 or rand == 5):
+        SetSce.AddEnemy(rand)
+
     #-----------game end---------------
     pygame.display.update()
     clock.tick(30)

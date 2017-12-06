@@ -13,9 +13,10 @@ brightGreen = (0, 255, 0)
 boardColor = (244, 66, 95)
 lightGreen = (107, 244, 65)
 RED = (255, 0, 0)
-playerImage = pygame.image.load("cavemanSprite.jpg").convert()
+playerImage = pygame.image.load("cavemanSprite.png").convert()
 playerCrounch = pygame.image.load("cavemanSprite_Crounch.png").convert()
 alien = pygame.image.load("alien.png")
+flyingAlien = pygame.image.load("Flying_Alien.png")
 playerImage.set_colorkey(WHITE)
 playerObject = ()
 
@@ -28,6 +29,18 @@ def LoadLevel():
     # append(plObject.GetComponent("ColliderComponent"))
     AddObject()
 
+def AddEnemy(enemy):
+    Info2 = COMP.GameObject()
+    if(enemy == 5):
+        Info2.SetSprite(flyingAlien)
+        Info2.SetLocation([750, 200])
+    else:
+        Info2 .SetSprite(alien)
+        Info2.SetLocation([750, 410])
+
+    Info2.objectName = "alien"
+    listDraw.add(Info2)
+    listEnemy.append(Info2)
 
 def AddObject():
     global listDraw
@@ -42,7 +55,7 @@ def AddObject():
     Info2 = COMP.GameObject()
     Info2.SetSprite(alien)
     Info2.objectName = "alien"
-    Info2.SetLocation([650,380]) 
+    Info2.SetLocation([750,410])
     
     listDraw.add(ground)
     listDraw.add(Info2)
