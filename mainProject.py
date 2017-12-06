@@ -4,7 +4,6 @@ import random
 import SetupScene as SetSce
 import DrawScript as DS
 import PhysicsScript as PS
-import ColliderScript as CS
 import Components as COMP
 init()
 
@@ -55,20 +54,12 @@ listOtherObject = SetSce.listEnemy
 
 
 def ApplyPhysics():
-    # check for collider
-    # for x in SetSce.listEnemy:
-    #     # print(x.listComp)
-    #     for comps in x.listComp:
-    #         if comps.name == "ColliderComponent":
-                
-                # result = comps.CheckCollider(
-                #     x.transform, playerChar.GetComponent("ColliderComponent"), playerChar.transform)
-                # if result:
-                #     SetSce.ResetLevel()
-                # print(result)
+
     hit =  playerChar.CheckCollider(SetSce.listEnemy)
     if hit == True :
         SetSce.ResetLevel()
+        print(playerChar.rect)
+    # hit = playerChar.CheckCollider(SetSce.listEnemy)
     # update velocity base on force
     playerPhys.ApplyGravity()
     # apply velocity to transform.
@@ -84,17 +75,12 @@ while not gameExit:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameExit = True
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            Mouse[event.button] = 1
-            Mouse[0] = (event.pos[0], event.pos[1])
-        elif event.type == pygame.MOUSEBUTTONUP:
-            Mouse[event.button] = 0
-            Mouse[0] = (event.pos[0], event.pos[1])
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
                 Key[0] += 1
                 playerPhys.Jump([playerPhys.Info[1][0], -moveVelocity])
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                SetSce.PlayerCrounch()
                 Key[1] += 1
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 Key[2] += 1
@@ -104,29 +90,24 @@ while not gameExit:
             if event.key == pygame.K_UP or event.key == pygame.K_w:
                 Key[0] = 0
             if event.key == pygame.K_DOWN or event.key == pygame.K_s:
+                SetSce.PlayerStand()
                 Key[1] = 0
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
                 Key[2] = 0
             if event.key == pygame.K_RIGHT or event.key == pygame.K_d:
                 Key[3] = 0
     # ===================== Logic =====================
-    # (1, [0, [0, 0], 0.1])
-    # print(SetSce.listObject[0].listComp)
-    if(Key[2] == 1):
+    if(Key[2] == 1): #left key
         playerPhys.SetVelocity( [-moveVelocity, playerPhys.Info[1][1]])
-    elif(Key[3] == 1):
+    elif(Key[3] == 1): # right key
         playerPhys.SetVelocity([moveVelocity, playerPhys.Info[1][1]])
     else:
         playerPhys.SetVelocity([0,  playerPhys.Info[1][1]])
 
-    #---- check if mouse is pressed on an interactable oject -----
-    # if Mouse[1] == 1:
-    # for index, x in enumerate(SetSce.listObject):
-    #     if x[1][0] < Mouse[0][0] < x[1][0] + x[2][0] and x[1][1] < Mouse[0][1] < x[1][1] + x[2][1]:
-    #         x[5](x, index)
-    #----- If right mouse click.
-    # if Mouse[3] == 1:
-    #     print(Mouse[0])
+    if(playerChar.rect.x >= DS.screenSize_x):
+        SetSce.ResetLevel()
+
+    # make all enemy move to the left.
     for enemy in SetSce.listEnemy:
         enemy.rect.x -= 5
         # ===================== Apply physics =====================

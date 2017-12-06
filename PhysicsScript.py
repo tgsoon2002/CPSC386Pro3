@@ -43,6 +43,7 @@ class PhysicsComponent (comp.BaseComponent):
             self.Info[2][1] = 0
             self.falling = False
             self.justJump = False
+        
 
     def Jump(self, Info):
         if self.justJump == False:

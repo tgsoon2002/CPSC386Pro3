@@ -15,6 +15,10 @@ class GameObject(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.listComp = []
 
+    def ChangeSprite (self, newImage):
+        self.image = newImage
+        self.rect = self.image.get_rect()
+        
     def SetSprite(self, newImage):
         self.image = newImage
         self.rect = self.image.get_rect()
@@ -23,6 +27,10 @@ class GameObject(pygame.sprite.Sprite):
         self.image = pygame.Surface([width, height])
         self.image.fill(color)
         self.rect = self.image.get_rect()
+
+    def SetLocation ( self, location):
+        self.rect.x = location[0]
+        self.rect.y = location[1]
 
     def GetComponent(self, type):
         for comp in self.listComp:
@@ -40,19 +48,20 @@ class GameObject(pygame.sprite.Sprite):
 class PlayerObject(GameObject):
     def __init__(self):
         super().__init__()
+    def __init__(self,x,y):
+        pygame.sprite.Sprite.__init__(self)
+        self.image = pygame.Surface([x, y])
+        self.image.fill([0, 0, 0])
+        self.rect = self.image.get_rect()
+        self.listComp = []
     def CheckCollider ( self,enemyList):
         block_hit_list = pygame.sprite.spritecollide(self, enemyList, False)
         
         # if block_hit_list
         for block in block_hit_list:
             if block.objectName == "alien":
-                print(block.objectName)
+                print(block_hit_list)
                 return True
         return False
-            # If we are moving right,
-        #     # set our right side to the left side of the item we hit
-        #     if self.change_x > 0:
-        #         self.rect.right = block.rect.left
-        #     elif self.change_x < 0:
-        #         # Otherwise if we are moving left, do the opposite.
-        #         self.rect.left = block.rect.right
+        
+
