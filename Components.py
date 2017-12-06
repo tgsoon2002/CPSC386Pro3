@@ -47,7 +47,7 @@ class GameObject(pygame.sprite.Sprite):
 
 class PlayerObject(GameObject):
     def __init__(self):
-        super().__init__()
+        super(PlayerObject, self).__init__()
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface([x, y])
