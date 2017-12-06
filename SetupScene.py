@@ -34,9 +34,9 @@ def AddObject():
     global listPlatformCollider
     global listEnemy
     # add the ground
-    Info1 = COMP.GameObject()
-    Info1.SetSolid(RED,800,300)
-    Info1.rect.y = 500
+    ground = COMP.GameObject()
+    ground.SetSolid(RED,800,300)
+    ground.rect.y = 500
 
     # Create enemy.
     Info2 = COMP.GameObject()
@@ -44,9 +44,9 @@ def AddObject():
     Info2.objectName = "alien"
     Info2.SetLocation([650,380]) 
     
-    listDraw.add(Info1)
+    listDraw.add(ground)
     listDraw.add(Info2)
-    listPlatformCollider.add(Info1)
+    listPlatformCollider.add(ground)
     listEnemy.append(Info2)
 
 

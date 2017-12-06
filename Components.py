@@ -15,13 +15,11 @@ class GameObject(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.listComp = []
 
-    def ChangeSprite (self, newImage):
-        self.image = newImage
-        self.rect = self.image.get_rect()
         
     def SetSprite(self, newImage):
         self.image = newImage
         self.rect = self.image.get_rect()
+        
 
     def SetSolid(self, color, width, height):
         self.image = pygame.Surface([width, height])
@@ -47,7 +45,7 @@ class GameObject(pygame.sprite.Sprite):
 
 class PlayerObject(GameObject):
     def __init__(self):
-        super(PlayerObject, self).__init__()
+        super().__init__()
     def __init__(self,x,y):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface([x, y])
@@ -63,5 +61,18 @@ class PlayerObject(GameObject):
                 print(block_hit_list)
                 return True
         return False
+    def CheckCollidePlatform(self, platformList, force):
+        block_hit_list = pygame.sprite.spritecollide(self, platformList, False)
+        for block in block_hit_list:
+            print (force.Info )
+            # # Reset our position based on the top/bottom of the object.
+            if force.Info[1][1] > 0:
+                self.rect.bottom = block.rect.top
+                force.Info[1][1] = 0
+                force.Info[2][1] = 0
+                force.justJump = False
+            # elif self.change_y < 0:
+            #     self.rect.top = block.rect.bottom
+        return True
         
 

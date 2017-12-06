@@ -34,15 +34,9 @@ class PhysicsComponent (comp.BaseComponent):
 
     def ApplyVelocity(self, rect):
         rect.x += self.Info[1][0]
-        if rect.y < 410.0 and self.Info[1][1] > 0:
-            self.falling = True
-            rect.y += self.Info[1][1]
-        elif self.Info[1][1] < 0:
-            rect.y += self.Info[1][1]
-        else:
-            self.Info[2][1] = 0
-            self.falling = False
-            self.justJump = False
+        # if the force is point down
+        rect.y += self.Info[1][1]
+       
         
 
     def Jump(self, Info):

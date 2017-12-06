@@ -64,6 +64,8 @@ def ApplyPhysics():
     playerPhys.ApplyGravity()
     # apply velocity to transform.
     playerPhys.ApplyVelocity(playerChar.rect)
+    #check velocity if touch platform
+    playerChar.CheckCollidePlatform(SetSce.listPlatformCollider, playerPhys)
 
 
 #---------------- Setup value ------------------------
