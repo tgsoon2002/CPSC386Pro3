@@ -133,13 +133,13 @@ while not gameExit:
         SetSce.ReDraw()
 
 
-    if( time_to_spawn > 1):
-        time_to_spawn -= 1
+    if( time_to_spawn > 1.5):
+        time_to_spawn -= 1.5
         if(rand < .15):
             SetSce.AddEnemy(5)
         elif( rand < .5):
             SetSce.AddEnemy(3)
-        elif(rand < .75):
+        elif(rand < .85):
             SetSce.AddEnemy(5)
             SetSce.AddEnemy(3)
 
