@@ -33,7 +33,8 @@ change = True
 
 moveVelocity = 6
 
-start = default_timer()
+global gameTime
+gameTime = 0
 
 Mouse = [(0, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # up,down,left,right,space
@@ -57,10 +58,11 @@ listOtherObject = SetSce.listEnemy
 
 
 def ApplyPhysics():
-
+    global gameTime
     hit =  playerChar.CheckCollider(SetSce.listEnemy)
     if hit == True :
         SetSce.ResetLevel()
+        gameTime = 0
         print(playerChar.rect)
     # hit = playerChar.CheckCollider(SetSce.listEnemy)
     # update velocity base on force
@@ -77,9 +79,8 @@ def ApplyPhysics():
 while not gameExit:
 
     dt = clock.tick(30)/1000.0
-    print ( dt)
     time_to_spawn += dt
-    print (time_to_spawn)
+    gameTime += dt
 
     rand = random.random()
     # ===================== Input =====================
@@ -116,6 +117,7 @@ while not gameExit:
         playerPhys.SetVelocity([0,  playerPhys.Info[1][1]])
 
     if(playerChar.rect.x >= DS.screenSize_x):
+        gameTime = 0
         SetSce.ResetLevel()
 
     # make all enemy move to the left.
@@ -141,6 +143,9 @@ while not gameExit:
             SetSce.AddEnemy(5)
             SetSce.AddEnemy(3)
 
+    timer = basicfont.render(str(gameTime), True, textColor)
+
+    DS.screen.blit(timer, (0,0))
     #-----------game end---------------
     pygame.display.update()
 
