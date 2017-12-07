@@ -27,7 +27,7 @@ class PhysicsComponent (comp.BaseComponent):
        
 
     def ApplyGravity(self):
-        self.Info[2][1] = self.Info[2][1] + (0.01 * self.Info[0])
+        self.Info[2][1] = self.Info[2][1] + (0.013 * self.Info[0])
         self.Info[1][0] += self.Info[2][0]
         self.Info[1][1] += self.Info[2][1]
         # print(self.Info[2])

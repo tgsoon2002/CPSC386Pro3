@@ -26,12 +26,14 @@ brightGreen = (0, 255, 0)
 boardColor = (244, 66, 95)
 lightGreen = (107, 244, 65)
 textColor = (255, 0, 0)
-
+global time_to_spawn
+time_to_spawn = 0;
 endGame = False
 change = True
 
 moveVelocity = 6
 
+start = default_timer()
 
 Mouse = [(0, 0), 0, 0, 0, 0, 0, 0, 0, 0, 0]
 # up,down,left,right,space
@@ -73,7 +75,13 @@ def ApplyPhysics():
 
 
 while not gameExit:
-    rand = random.randrange(1,100)
+
+    dt = clock.tick(30)/1000.0
+    print ( dt)
+    time_to_spawn += dt
+    print (time_to_spawn)
+
+    rand = random.random()
     # ===================== Input =====================
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -123,11 +131,18 @@ while not gameExit:
         SetSce.ReDraw()
 
 
-    if(rand == 3 or rand == 5):
-        SetSce.AddEnemy(rand)
+    if( time_to_spawn > 1):
+        time_to_spawn -= 1
+        if(rand < .15):
+            SetSce.AddEnemy(5)
+        elif( rand < .5):
+            SetSce.AddEnemy(3)
+        elif(rand < .75):
+            SetSce.AddEnemy(5)
+            SetSce.AddEnemy(3)
 
     #-----------game end---------------
     pygame.display.update()
-    clock.tick(30)
+
 
 pygame.quit()
